@@ -5,8 +5,9 @@ import axios from 'axios';
 import CardComponent from './CardComponent'; // Adjust the path according to your project structure
 import { Card } from './Card';
 import CardDetail from './CardDetail';
+import config from './config.json'
 
-const baseUrl = 'https://localhost:3000/cards'
+const baseUrl = config.API_URL
 
 
 const CardList: React.FC = () => {

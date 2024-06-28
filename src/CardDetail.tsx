@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { Card } from './Card';
+import {Card} from './Card';
 import Grid from '@mui/material/Grid';
 import FormControl from '@mui/material/FormControl';
-import { Button, IconButton, MenuItem, Select, TextField, styled } from '@mui/material';
+import {Button, MenuItem, Select, styled} from '@mui/material';
+import config from './config.json'
 
-
-
-
-const baseUrl = 'https://localhost:3000/cards/'
+const baseUrl = config.API_URL
 
 interface CardDetailProps {
     id: number;
     onClose: () => void;
 }
 
-const CardDetail: React.FC<CardDetailProps> = ({ id, onClose }) => {
+const CardDetail: React.FC<CardDetailProps> = ({id, onClose}) => {
 
     const [card, setCard] = useState<Card | null>(null);
     const [opponents, setOpponents] = useState<Card[]>([]);
@@ -31,13 +29,13 @@ const CardDetail: React.FC<CardDetailProps> = ({ id, onClose }) => {
     }, []);
 
     const handleBattle = () => {
-        axios.post(`${baseUrl}battle`, { id, opponentId }).then(response => {
+        axios.post(`${baseUrl}battle`, {id, opponentId}).then(response => {
             setResult(response.data);
         });
     };
 
 
-    const CustomFormControl = styled(FormControl)(({ theme }) => ({
+    const CustomFormControl = styled(FormControl)(({theme}) => ({
         minWidth: '90%',
         margin: theme.spacing(1),
         textDecorationColor: 'white',
@@ -57,14 +55,14 @@ const CardDetail: React.FC<CardDetailProps> = ({ id, onClose }) => {
 
     return card ? (
 
-        <div className='detail' >
+        <div className='detail'>
 
-            <Grid container spacing={2} >
+            <Grid container spacing={2}>
 
-                <Grid item xs={12} sm={6}  >
+                <Grid item xs={12} sm={6}>
                     <h2 className="poke-name">{card.name}</h2>
                 </Grid>
-                <Grid item xs={12} sm={6}  >
+                <Grid item xs={12} sm={6}>
                     <p className="hp">
                         <span>HP</span>
                         {card.hp}
@@ -74,23 +72,26 @@ const CardDetail: React.FC<CardDetailProps> = ({ id, onClose }) => {
 
 
             <Grid container spacing={2} className='container-detail'>
-                <Grid item xs={12} sm={6}  >
-                    <img src={`${card.imageUrl}_hires.png`} className='imgDetail' onClick={() => onClose()} />
+                <Grid item xs={12} sm={6}>
+                    <img src={`${card.imageUrl}_hires.png`} className='imgDetail' onClick={() => onClose()}/>
                 </Grid>
 
-                <Grid item xs={12} sm={6}  >
-                    <div className='empty' style={{ height: '35%' }}></div>
+                <Grid item xs={12} sm={6}>
+                    <div className='empty' style={{height: '35%'}}></div>
 
                     <div className="vs">VS</div>
-                    <div style={{ marginLeft: '15%' }}>
-                        <CustomFormControl >
+                    <div style={{marginLeft: '15%'}}>
+                        <CustomFormControl>
 
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 value={opponentId}
                                 label="Select your opponent"
-                                onChange={(event) => {setOpponentId(event.target.value); setResult(null)}}
+                                onChange={(event) => {
+                                    setOpponentId(event.target.value);
+                                    setResult(null)
+                                }}
                             >
                                 {opponents.map(opponent => opponent.id !== card.id && (
                                     <MenuItem value={opponent.id}>{opponent.name}</MenuItem>
@@ -98,21 +99,20 @@ const CardDetail: React.FC<CardDetailProps> = ({ id, onClose }) => {
                                 ))}
                             </Select>
                         </CustomFormControl>
-                        
+
                     </div>
                     <div className='button-battle'>
-                    {opponentId !== "" && (
+                        {opponentId !== "" && (
                             <Button variant="contained" color="success" onClick={handleBattle}>
-                            Battle 
-                        </Button>
+                                Battle
+                            </Button>
                         )}
-                        
-                        
-                        
+
+
                     </div>
 
                     <div className='battle-result'>
-                    {result && <p>{result}</p>}
+                        {result && <p>{result}</p>}
                     </div>
                 </Grid>
 
@@ -121,7 +121,8 @@ const CardDetail: React.FC<CardDetailProps> = ({ id, onClose }) => {
 
             <Grid container spacing={2} className='stats'>
                 <Grid item xs={12} sm={6} md={4} className='stats-div'><h3>{card.attack}</h3><p>Attack</p></Grid>
-                <Grid item xs={12} sm={6} md={4} className='stats-div'> <h3>{card.weaknesses}</h3><p>Weaknesses</p></Grid>
+                <Grid item xs={12} sm={6} md={4} className='stats-div'><h3>{card.weaknesses}</h3><p>Weaknesses</p>
+                </Grid>
                 <Grid item xs={12} sm={6} md={4} className='stats-div'><h3>{card.defense}</h3> <p>Defense</p></Grid>
             </Grid>
 
